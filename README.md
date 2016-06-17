@@ -1,4 +1,4 @@
-# NutScript 1.1 Repository
+# NutScript 1.1 Plugin Repository
 
 ## Safebox Plugin
 
