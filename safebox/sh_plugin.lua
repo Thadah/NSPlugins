@@ -1,6 +1,6 @@
 PLUGIN.name = "Safebox"
 PLUGIN.author = "La Corporativa"
-PLUGIN.desc = "Un plugin de safebox."
+PLUGIN.desc = "A plugin that allows players to have a safe place to store their items."
 
 PLUGIN.config = {
 	width = 8,
