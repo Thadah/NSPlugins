@@ -5,7 +5,6 @@ ENT.Author = "La Corporativa"
 ENT.Spawnable = true
 ENT.AdminOnly = true
 ENT.Category = "NutScript"
-ENT.Level = "Level 2"
 
 if (SERVER) then
 
@@ -41,13 +40,13 @@ if (SERVER) then
 	end
 	
 else
-	/*
+
 	curstat = {
-	[0] = { "Nivel 2", { 90, 150, 170 } },
-	[1] = { "Denegado", { 150, 20, 20 }, "buttons/combine_button2.wav" },
-	[2] = { "Concedido", { 90, 150, 100 }, "buttons/combine_button1.wav" },
+		[0] = { "Nivel 2", { 90, 150, 170 } },
+		[1] = { "Denied", { 150, 20, 20 }, "buttons/combine_button2.wav" },
+		[2] = { "Granted", { 90, 150, 100 }, "buttons/combine_button1.wav" },
 	}
-	*/
+
 	
 	net.Receive( "nut_CardVerification", function( len )
 		local ent = net.ReadEntity()

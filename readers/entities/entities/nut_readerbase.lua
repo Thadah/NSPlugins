@@ -19,7 +19,7 @@ if (SERVER) then
 else
 
 	curstat = {
-		[0] = { ENT.Level, { 90, 150, 170 } },
+		[0] = { "Level 0", { 90, 150, 170 } },
 		[1] = { "Denied", { 150, 20, 20 }, "buttons/combine_button2.wav" },
 		[2] = { "Granted", { 90, 150, 100 }, "buttons/combine_button1.wav" },
 	}
@@ -65,7 +65,7 @@ else
 			
 			
 			local alpha2 = math.abs( math.cos( RealTime() * 80 ) * 100 )
-			local text = "Control de Acceso"
+			local text = "Access Control"
 			local tx, ty = surface.GetTextSize( text )
 			/*
 			surface.SetFont("DermaDefaultBold")
