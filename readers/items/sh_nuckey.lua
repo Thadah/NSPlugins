@@ -1,6 +1,6 @@
-ITEM.name = "Tarjeta Magnética - Nivel 0"
+ITEM.name = "Magnetic Card - Level 0"
 ITEM.uniqueID = "nuckey"
 ITEM.flag = "q"
-ITEM.category = "Identificación"
+ITEM.category = "Identification"
 ITEM.model = Model("models/dorado/tarjetazero.mdl")
-ITEM.desc = "Una tarjeta magnética que te permite acceder al núcleo de la Ciudadela."
+ITEM.desc = "A card that allows access to Level 0 areas"

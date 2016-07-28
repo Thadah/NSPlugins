@@ -1,6 +1,6 @@
-ITEM.name = "Tarjeta Magnética - Nivel 2"
+ITEM.name = "Magnetic Card - Level 2"
 ITEM.uniqueID = "comkey"
 ITEM.flag = "q"
-ITEM.category = "Identificación"
+ITEM.category = "Identification"
 ITEM.model = Model("models/dorado/tarjeta2.mdl")
-ITEM.desc = "Una tarjeta magnética que te permite acceder a áreas como miembros de Protección Civil."
+ITEM.desc = "A card that allows access to Level 2 areas."
