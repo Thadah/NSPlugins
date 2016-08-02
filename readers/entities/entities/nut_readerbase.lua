@@ -17,12 +17,6 @@ if (SERVER) then
 	end
 	
 else
-
-	curstat = {
-		[0] = { "Level 0", { 90, 150, 170 } },
-		[1] = { "Denied", { 150, 20, 20 }, "buttons/combine_button2.wav" },
-		[2] = { "Granted", { 90, 150, 100 }, "buttons/combine_button1.wav" },
-	}
 	
 	function ENT:Initialize()
 		self.width = 170
