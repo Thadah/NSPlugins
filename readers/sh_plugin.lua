@@ -5,9 +5,8 @@ PLUGIN.author = "La Corporativa"
 PLUGIN.desc = "Adds card readers with different access levels"
 PLUGIN.locks = PLUGIN.locks or {}
 
-resource.AddWorkshop("282312812")
-
 if (SERVER) then
+	resource.AddWorkshop("282312812")
 
 	function PLUGIN:SaveData()
 
