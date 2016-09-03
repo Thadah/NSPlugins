@@ -7,8 +7,9 @@ interfere with other inventories that are opened at the same time.
 
 ##Readers Plugin
 
-Similar to the Access plugin, but simpler, allows adding some card readers next to the doors which can only be opened with a card that's the same level
-of the reader or higher.
+Similar to the Access plugin, but simpler, allows adding some card readers next to the doors which can only be opened with a card that's the same level of the reader or higher.
+
+Usage: Spawn a reader and put it near a door with a physgun. Then, use the /addlock command in the reader and afterwards use /addlock in the door.
 
 ## Looting Plugin
 
