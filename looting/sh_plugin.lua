@@ -1,51 +1,52 @@
 PLUGIN.name = "Looting"
-PLUGIN.author = "orc, thadah"
+PLUGIN.author = "orc, thadah, hikka (refix)"
 PLUGIN.desc = "A plugin for dropping player inventory on death."
 
-nut.config.add("lootTime", 100, "Number of seconds before loot disappears.", nil, {data = {min = 1, max = 1000}, category = "Looting"})
+nut.config.add("lootTime", 50, "Number of seconds before loot disappears.", nil, {data = {min = 1, max = 1000}, category = "Looting"})
 
 -- note nut_container does not exist in 1.1 so alter that
 
 function PLUGIN:PlayerDeath( ply, dmg, att )
-	local entity = ents.Create("nut_loot") --** Create World Container that should not be saved in the server.
-		entity:SetPos( ply:GetPos() + Vector( 0, 0, 10 ) )
-		entity:SetAngles(entity:GetAngles())
-		entity:Spawn()
-		entity:setNetVar("name", "Belongings" ) --** Yup.
-		entity:setNetVar( "max", 5000 )
-		entity:SetModel("models/props_junk/garbage_bag001a.mdl")
-		entity:SetSolid(SOLID_VPHYSICS)
-		entity:PhysicsInit(SOLID_VPHYSICS)
-
-		local physObj = entity:GetPhysicsObject()
-
-		if (IsValid(physObj)) then
-			physObj:EnableMotion(true)
-			physObj:Wake()
+	timer.Simple(0, function()
+		if (IsValid(ply)) then
+			local inv = ply:getChar():getInv():getItems()
+			if inv && #inv < 1 then return end
 		end
+	end)
 		
-	local invName = "loot-"..math.random(0,9999) --++Just in case it is needed somewhere
-	local plyInv = ply:getChar():getInv()
+	local entity = ents.Create("nut_loot") --** Create World Container that should not be saved in the server.
+	entity:SetPos( ply:GetPos() + Vector( 0, 0, 10 ) )
+	entity:SetAngles(entity:GetAngles())
+	entity:Spawn()
+	entity:setNetVar("name", "Belongings" ) --** Yup.
+	entity:setNetVar( "max", 5000 )
+	entity:SetModel("models/props_junk/garbage_bag001a.mdl")
+	entity:SetSolid(SOLID_VPHYSICS)
+	entity:PhysicsInit(SOLID_VPHYSICS)
 
-	nut.item.newInv(0, invName, function(inventory)
+	local physObj = entity:GetPhysicsObject()
+
+	if (IsValid(physObj)) then
+		physObj:EnableMotion(true)
+		physObj:Wake()
+	end
+
+	--nut.item.newInv(0, "loot-"..math.random(0,9999), function(inventory)
+	nut.item.newInv(0, "loot"..ply:getChar():getID(), function(inventory)
 		if (IsValid(entity)) then
-			inventory:setSize(6, 4)
+			inventory:setSize(nut.config.get("invW"), nut.config.get("invH"))
 			entity:setInventory(inventory)
 		end
 	end)
 
-	local items = plyInv:getItems()
-	local entInv = entity:getInv()
-
-	for _, v in pairs(items) do
+	for _, v in pairs(ply:getChar():getInv():getItems()) do
 		v:transfer(entity:getNetVar("id"))
+		-- v:transfer(entity:getNetVar("id", ""))
 	end
 
 	ply:StripAmmo() --** This is Normal.
 
 end
-
-
 
 if (SERVER) then
 
@@ -101,7 +102,7 @@ if (SERVER) then
 		print(inventory2)
 	end
 
-	netstream.Hook("lootExit", function(client)
+	netstream.Hook("lootExit", function(client, index)
 		local entity = client.nutBagEntity
 
 		if (IsValid(entity)) then
@@ -109,6 +110,10 @@ if (SERVER) then
 		end
 
 		client.nutBagEntity = nil
+		
+		--local inv = nut.item.inventories[index:getNetVar("id")]
+		--local inv = index:getInv():getItems()
+		--if inv && #inv < 1 then index.timeToDelete = CurTime() return end
 	end)
 
 else
@@ -125,31 +130,40 @@ else
 				nut.gui.inv1:setInventory(inventory2)
 			end
 
-			local panel = vgui.Create("nutInventory")
-			panel:ShowCloseButton(true)
-			panel:SetTitle("Belongings")
-			panel:setInventory(inventory)
-			panel:MoveLeftOf(nut.gui.inv1, 4)
-			panel.OnClose = function(this)
+			lootingPanelMain = vgui.Create("nutInventory")
+			lootingPanelMain:ShowCloseButton(true)
+			lootingPanelMain:SetTitle("Вещи убитого")
+			lootingPanelMain:setInventory(inventory)
+			lootingPanelMain:MoveLeftOf(nut.gui.inv1, 4)
+			lootingPanelMain.OnClose = function(this)
 
 				if (IsValid(nut.gui.inv1) and !IsValid(nut.gui.menu)) then
 					nut.gui.inv1:Remove()
 				end
 
-				netstream.Start("lootExit")
+				netstream.Start("lootExit", entity)
 			end
 			local oldClose = nut.gui.inv1.OnClose
 			nut.gui.inv1.OnClose = function()
-				if (IsValid(panel) and !IsValid(nut.gui.menu)) then
-					panel:Remove()
+				if (IsValid(lootingPanelMain) and !IsValid(nut.gui.menu)) then
+					lootingPanelMain:Remove()
 				end
 
-				netstream.Start("lootExit")
+				netstream.Start("lootExit", entity)
 				-- IDK Why. Just make it sure to not glitch out with other stuffs.
 				nut.gui.inv1.OnClose = oldClose
 			end
 
-			nut.gui["inv"..index] = panel
+			nut.gui["inv"..index] = lootingPanelMain
+		end
+	end)
+	
+	netstream.Hook("closeLootMenuSafe", function()
+		if (IsValid(nut.gui.inv1) and !IsValid(nut.gui.menu)) then
+			nut.gui.inv1:Remove()
+		end
+		if (IsValid(lootingPanelMain) and !IsValid(nut.gui.menu)) then
+			lootingPanelMain:Remove()
 		end
 	end)
 end
