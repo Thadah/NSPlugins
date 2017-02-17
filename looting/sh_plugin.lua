@@ -6,14 +6,7 @@ nut.config.add("lootTime", 50, "Number of seconds before loot disappears.", nil,
 
 -- note nut_container does not exist in 1.1 so alter that
 
-function PLUGIN:PlayerDeath( ply, dmg, att )
-	timer.Simple(0, function()
-		if (IsValid(ply)) then
-			local inv = ply:getChar():getInv():getItems()
-			if inv && #inv < 1 then return end
-		end
-	end)
-		
+function PLUGIN:PlayerDeath( ply, dmg, att )		
 	local entity = ents.Create("nut_loot") --** Create World Container that should not be saved in the server.
 	entity:SetPos( ply:GetPos() + Vector( 0, 0, 10 ) )
 	entity:SetAngles(entity:GetAngles())
@@ -94,12 +87,6 @@ if (SERVER) then
 	
 	function PLUGIN:LootItemRemoved(entity, inventory)
 		self:saveLoot()
-	end
-
-	function PLUGIN:LootCanTransfer(inventory, client, oldX, oldY, x, y, newInvID)
-		local inventory2 = nut.item.inventories[newInvID]
-
-		print(inventory2)
 	end
 
 	netstream.Hook("lootExit", function(client, index)
