@@ -132,7 +132,7 @@ else
 
 			lootingPanelMain = vgui.Create("nutInventory")
 			lootingPanelMain:ShowCloseButton(true)
-			lootingPanelMain:SetTitle("Вещи убитого")
+			lootingPanelMain:SetTitle("Loot")
 			lootingPanelMain:setInventory(inventory)
 			lootingPanelMain:MoveLeftOf(nut.gui.inv1, 4)
 			lootingPanelMain.OnClose = function(this)
