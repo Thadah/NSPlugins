@@ -10,7 +10,7 @@ ENT.timeToDelete = 1
 if (SERVER) then
 
 	function ENT:Think()
-		if (self.timeToDelete <= CurTime()) then
+		if (IsValid(self) && self.timeToDelete <= CurTime()) then
 			self:Remove()
 		end
 	end
@@ -51,9 +51,6 @@ if (SERVER) then
 
 				return #receivers > 0 and receivers or nil
 			end
-			inventory.onCanTransfer = function(inventory, client, oldX, oldY, x, y, newInvID)
-				return hook.Run("StorageCanTransfer", inventory, client, oldX, oldY, x, y, newInvID)
-			end
 		end
 	end
 
@@ -61,8 +58,17 @@ if (SERVER) then
 		local index = self:getNetVar("id")
 
 		if (!nut.shuttingDown and !self.nutIsSafe and index) then
+			for _, v in ipairs(player.GetAll()) do
+				netstream.Start(v, "closeLootMenuSafe")
+				local entity = v.nutBagEntity
+				if (IsValid(entity)) then
+					entity.receivers[v] = nil
+				end
+				v.nutBagEntity = nil
+			end
+		
+		
 			local item = nut.item.inventories[index]
-
 			if (item) then
 				nut.item.inventories[index] = nil
 
@@ -72,27 +78,42 @@ if (SERVER) then
 				hook.Run("StorageItemRemoved", self, item)
 			end
 		end
+		
+		self:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1, 3)..".wav")
+		local position = self:LocalToWorld(self:OBBCenter())
+		local effect = EffectData()
+		effect:SetStart(position)
+		effect:SetOrigin(position)
+		effect:SetScale(3)
+		util.Effect("GlassImpact", effect)
 	end
 
-	local OPEN_TIME = .7
+	local OPEN_TIME = .5
 	function ENT:OpenInv(activator)
 		local inventory = self:getInv()
 
-		activator:setAction("Opening...", OPEN_TIME, function()
-			if (activator:GetPos():Distance(self:GetPos()) <= 100) then
+		activator:setAction("@opening", OPEN_TIME)
+		activator:doStaredAction(self, function()
+			if (activator:GetPos():Distance(self:GetPos()) < 101) then
 				self.receivers[activator] = true
 				activator.nutBagEntity = self
 				
 				inventory:sync(activator)
 				netstream.Start(activator, "lootOpen", self, inventory:getID())
-				print("Exec")
 				self:EmitSound("items/ammocrate_open.wav")
 			end
+		end, OPEN_TIME, function()
+			if (IsValid(activator)) then
+				activator:setAction()
+			end
 		end)
+		return
 	end
 
 	function ENT:Use(activator)
 		local inventory = self:getInv()
+		--local inv = nut.item.inventories[self:getNetVar("id")]
+		--if inv && #inv:getItems() < 1 then self.timeToDelete = CurTime() return end
 
 		if (inventory and (activator.nutNextOpen or 0) < CurTime()) then
 			if (activator:getChar()) then
