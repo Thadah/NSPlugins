@@ -3,8 +3,8 @@ local PLUGIN = PLUGIN
 AddCSLuaFile()
 
 ENT.Type = "anim"
-ENT.PrintName = "Item Box [Premium]"
-ENT.Category = "International Fleet RP"
+ENT.PrintName = "safebox"
+ENT.Category = "Nutscript"
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
@@ -71,8 +71,6 @@ if (SERVER) then
 		self:OpenInv(activator)		
 	end
 else
-	player2 = LocalPlayer()
-	if(player2:IsUserGroup("Premium Member")) then
 		netstream.Hook("safeOpen", function(index)
 			local inventory = nut.item.inventories[index]
 
@@ -120,7 +118,5 @@ else
 			local position = toScreen(self.LocalToWorld(self, self.OBBCenter(self)))
 			local x, y = position.x, position.y
 			local tx, ty = drawText("Storage Entity", x, y, colorAlpha(configGet("color"), alpha), 1, 1, nil, alpha * 2)
-		end
-		else nut.util.notifyLocalized("Subscribe to a Premium Membership to access this box!")
 		end
 end
