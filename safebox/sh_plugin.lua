@@ -4,7 +4,7 @@ PLUGIN.desc = "A plugin that allows players to have a safe place to store their 
 
 PLUGIN.config = {
 	width = 8,
-	height = 7
+	height = 7,
 }
 
 if (SERVER) then
