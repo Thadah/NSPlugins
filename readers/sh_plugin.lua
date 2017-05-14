@@ -3,27 +3,17 @@ local PLUGIN = PLUGIN
 PLUGIN.name = "Card Readers"
 PLUGIN.author = "La Corporativa"
 PLUGIN.desc = "Adds card readers with different access levels"
+PLUGIN.readerType = {"nut_cwureader", "nut_comreader", "nut_admreader", "nut_nucreader"}
 PLUGIN.locks = PLUGIN.locks or {}
 
 if (SERVER) then
 	resource.AddWorkshop("282312812")
 
 	function PLUGIN:SaveData()
-
-		for k, v in pairs( ents.FindByClass("nut_cwureader") ) do
-			self.locks[#self.locks + 1] = {reader = "nut_cwureader", position = v:GetPos(), angles = v:GetAngles(), door = v.door}
-		end
-
-		for k, v in pairs( ents.FindByClass("nut_comreader") ) do
-			self.locks[#self.locks + 1] = {reader = "nut_comreader", position = v:GetPos(), angles = v:GetAngles(), door = v.door}
-		end
-
-		for k, v in pairs( ents.FindByClass("nut_admreader") ) do
-			self.locks[#self.locks + 1] = {reader = "nut_admreader", position = v:GetPos(), angles = v:GetAngles(), door = v.door}
-		end
-
-		for k, v in pairs( ents.FindByClass("nut_nucreader") ) do
-			self.locks[#self.locks + 1] = {reader = "nut_nucreader", position = v:GetPos(), angles = v:GetAngles(), door = v.door}
+		for _, v in pairs(self.readerType) do
+			for _, v2 in pairs(ents.FindByClass(v)) do
+				self.locks[#self.locks + 1] = {reader = v, position = v2:GetPos(), angles = v2:GetAngles(), door = v2.door}
+			end
 		end
 
 		self:setData(self.locks)
@@ -59,6 +49,10 @@ local function IsDoor(entity)
 	return string.find(entity:GetClass(), "door")
 end
 
+local function getReaders()
+	return PLUGIN.readerType
+end
+
 nut.command.add("addlock", {
 	adminOnly = true,
 	onRun = function(client)
@@ -69,18 +63,21 @@ nut.command.add("addlock", {
 		trace = util.TraceHull(tr)
 
 		lock = trace.Entity
-		
-		if (!client:GetVar("lock")) then
-			if (lock:IsValid() and (lock:GetClass() == "nut_cwureader" or lock:GetClass() == "nut_specreader" or lock:GetClass() == "nut_comreader" or lock:GetClass() == "nut_nucreader" or lock:GetClass() == "nut_admreader")) then
-				client:setNetVar("lock", lock)
-				return "@validDoor"
+
+		if (!client:getNetVar("lock")) then
+			if (lock:IsValid())  then
+				for k, v in pairs(getReaders()) do
+					if (lock:GetClass(v)) then
+						client:setNetVar("lock", lock)
+						return "@validDoor"
+					end
+				end
 			end
 		else
 			if trace.Entity:IsValid() and IsDoor(lock) then
-				
 				local ourLock = client:getNetVar("lock")
 				ourLock.door = lock:GetPos()
-				
+
 				client:setNetVar("lock", nil)
 				return "@readerAdded"
 			else
