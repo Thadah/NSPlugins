@@ -1,6 +1,6 @@
 ENT.Base = "nut_readerbase"
 ENT.Type = "anim"
-ENT.PrintName = "Magnetic Card Reader - Level 3"
+ENT.PrintName = "Level 1 MCR"
 ENT.Author = "La Corporativa"
 ENT.Spawnable = true
 ENT.AdminOnly = true
