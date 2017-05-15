@@ -3,4 +3,4 @@ ITEM.uniqueID = "nuckey"
 ITEM.flag = "q"
 ITEM.category = "Identification"
 ITEM.model = Model("models/dorado/tarjetazero.mdl")
-ITEM.desc = "A card that allows access to Level 0 areas"
+ITEM.desc = "A card that allows access to any area"
