@@ -1,4 +1,4 @@
-ITEM.name = "Magentic Card - Level 1"
+ITEM.name = "Magnetic Card - Level 1"
 ITEM.uniqueID = "admkey"
 ITEM.flag = "q"
 ITEM.category = "Identification"

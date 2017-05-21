@@ -77,6 +77,8 @@ nut.command.add("addlock", {
 			if trace.Entity:IsValid() and IsDoor(lock) then
 				local ourLock = client:getNetVar("lock")
 				ourLock.door = lock:GetPos()
+				lock:Fire( "close", .1 )
+				lock:Fire( "lock", .1 )
 
 				client:setNetVar("lock", nil)
 				return "@readerAdded"
