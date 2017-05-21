@@ -15,3 +15,9 @@ Usage: Spawn a reader and put it near a door with a physgun. Then, use the /addl
 
 This plugin will make a player drop all its inventory in the form of a bag when they die, so that they can be 'looted'. However, this will
 not make the player drop the money they have.
+
+## World Item Container Plugin 
+
+This plugin will spawn a list of items inside a container for players to find and loot. It must be configured in sh_plugin.lua to add the item lists and container models, in PLUGIN.itemTable and PLUGIN.containerModel.
+
+All other configurations can be done inside NutScript.
