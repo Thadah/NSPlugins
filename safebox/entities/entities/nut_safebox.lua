@@ -3,14 +3,14 @@ local PLUGIN = PLUGIN
 AddCSLuaFile()
 
 ENT.Type = "anim"
-ENT.PrintName = "safebox"
-ENT.Category = "Nutscript"
+ENT.PrintName = "Safebox"
+ENT.Category = "NutScript"
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
 if (SERVER) then
 	function ENT:Initialize()
-		self:SetModel("models/Items/item_item_crate.mdl")
+		self:SetModel(nut.config.get("safeModel"))
 		self:SetSolid(SOLID_VPHYSICS)
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetUseType(SIMPLE_USE)
@@ -23,14 +23,14 @@ if (SERVER) then
 			physObj:Wake()
 		end
 	end
-	
+
 	function ENT:CreateInv(activator)
 		local character = activator:getChar()
 		nut.item.newInv(character:getID(), "safe."..character:getID(), function(inventory)
 			character:setData("safebox", inventory:getID())
 		end)
 	end
-	
+
 	function ENT:getInv(activator)
 		local index = activator:getChar():getData("safebox")
 
@@ -43,23 +43,23 @@ if (SERVER) then
 		local character = activator:getChar()
 		local index = character:getData("safebox")
 		local inventory = nut.item.inventories[index]
-		
+
 		if (index) then
 			if (inventory) then
 				inventory:sync(activator)
 			else
-				nut.item.restoreInv(index, PLUGIN.config.width, PLUGIN.config.height, function(inventory)
+				nut.item.restoreInv(index, nut.config.get("safeWidth"), nut.config.get("safeHeight"), function(inventory)
 					inventory:setOwner(character, true)
 				end)
 			end
 		else
-			self:CreateInv(activator)
+			self:createInv(nut.config.get("invWidth"), nut.config.get("invHeight"), character:getID())
 		end
 	end
-	
+
 	function ENT:OpenInv(activator)
 		local index = activator:getChar():getData("safebox")
-		
+
 
 		if (index) then
 			netstream.Start(activator, "safeOpen", index)
@@ -68,7 +68,7 @@ if (SERVER) then
 		end
 	end
 	function ENT:Use(activator)
-		self:OpenInv(activator)		
+		self:OpenInv(activator)
 	end
 else
 		netstream.Hook("safeOpen", function(index)
@@ -85,7 +85,7 @@ else
 
 			local panel = vgui.Create("nutInventory")
 			panel:ShowCloseButton(true)
-			panel:SetTitle("Storage Entity")
+			panel:SetTitle("Safebox")
 			panel:setInventory(inventory)
 			panel:MoveLeftOf(nut.gui.inv1, 4)
 
@@ -117,6 +117,6 @@ else
 		function ENT:onDrawEntityInfo(alpha)
 			local position = toScreen(self.LocalToWorld(self, self.OBBCenter(self)))
 			local x, y = position.x, position.y
-			local tx, ty = drawText("Storage Entity", x, y, colorAlpha(configGet("color"), alpha), 1, 1, nil, alpha * 2)
+			local tx, ty = drawText("Safebox", x, y, colorAlpha(configGet("color"), alpha), 1, 1, nil, alpha * 2)
 		end
 end

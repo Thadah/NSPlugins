@@ -2,10 +2,15 @@ PLUGIN.name = "Safebox"
 PLUGIN.author = "La Corporativa"
 PLUGIN.desc = "A plugin that allows players to have a safe place to store their items."
 
-PLUGIN.config = {
-	width = 8,
-	height = 7,
-}
+nut.config.add("safeModel", "models/Items/item_item_crate.mdl", "The model of the safe", nil, {
+		category = "Safebox"
+})
+nut.config.add("safeHeight", 7, "The height of the safe", nil, {
+		category = "Safebox"
+})
+nut.config.add("safeWidth", 8, "The width of the safe", nil, {
+		category = "Safebox"
+})
 
 if (SERVER) then
 
@@ -18,7 +23,7 @@ if (SERVER) then
 
 		self:setData(data)
 	end
-	
+
 	function PLUGIN:SaveData()
 		self:saveBox()
 	end
@@ -35,7 +40,7 @@ if (SERVER) then
 				storage:SetModel(v[3])
 				storage:SetSolid(SOLID_VPHYSICS)
 				storage:PhysicsInit(SOLID_VPHYSICS)
-				
+
 				local physObject = storage:GetPhysicsObject()
 
 				if (physObject) then
