@@ -154,7 +154,9 @@ end
 
 netstream.Hook("nut_lc_CraftItem", function(client, item, machine)
 	local itemEntity = getItemEntity(item)
-	PrintTable(itemEntity.recipe)
+	if !itemEntity or itemEntity == nil then
+		ErrorNoHalt("@lc_corrupt")
+	end
 	local canCraft, item = canPlayerCraft(client, itemEntity)
 	if (canCraft == nil) then
 		client:notifyLocalized("lc_noRecipe", item.name)

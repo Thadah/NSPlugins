@@ -21,13 +21,14 @@ local PANEL = {}
 			self.list:Dock(FILL)
 			self.list:SetDrawBackground(true)
 			if (self.page == 1) then
+				self.craftButton:SetText("Craft")
+				self.craftButton:SetEnabled(false)
+				self.craftButton:SetTextColor(Color(0,0,0,200))
 				self.closeBackButton:SetText("Close")
 				self.closeBackButton.DoClick = function()
 					self:Remove()
 				end
 
-				self.takeCraftButton:SetText("Craft")
-				self.takeCraftButton:SetEnabled(false)
 				addCategoryButtons(self.craftableitems)
 			elseif (self.page == 2) then
 				self.closeBackButton:SetText("Back")
@@ -37,15 +38,16 @@ local PANEL = {}
 					refreshCrafting()
 				end
 
-				self.takeCraftButton:SetText("Craft")
-				self.takeCraftButton:SetEnabled(false)
-				self.takeCraftButton:SetTextColor(Color(0,0,0,200))
-				self.takeCraftButton.DoClick = function()
+				self.craftButton:SetText("Craft")
+				self.craftButton:SetEnabled(false)
+				self.craftButton:SetTextColor(Color(0,0,0,200))
+				self.craftButton.DoClick = function()
 					netstream.Start("nut_lc_CraftItem", self.itemSelected.uniqueID, self.caller)
 				end
 				addItemButtons(self.categorySelected)
 			end
 		end
+
 		function addCategoryButtons(categories)
 			self.categories = {}
 			if categories and table.getn(categories) > 0 then
@@ -125,7 +127,7 @@ local PANEL = {}
 				name:SetTextColor(Color(200,200,200,200))
 				name:SetFont("nutMediumFont")
 				local width, heigth = surface.GetTextSize(v.name)
-				name:SetSize(width*2, heigth)
+				name:SetSize(width*2, heigth*1.25)
 				name:SetPos(0.01369863 * self:GetWide() + 100, localPos + ((buttonSizeH) / 3) - 5)
 				name:SetText(v.name)
 				name.OnCursorEntered = function()
@@ -152,8 +154,8 @@ local PANEL = {}
 					if (self.oldDesc) then
 						self.oldDesc:SetTextColor(Color(200,200,200,200))
 					end
-					self.takeCraftButton:SetEnabled(true)
-					self.takeCraftButton:SetTextColor(Color(255,255,255,255))
+					self.craftButton:SetEnabled(true)
+					self.craftButton:SetTextColor(Color(255,255,255,255))
 					creatingItemButton:SetEnabled(false)
 					name:SetTextColor(Color(0,0,0,200))
 					desc:SetTextColor(Color(0,0,0,200))
@@ -198,8 +200,6 @@ local PANEL = {}
 					if (self.oldDesc) then
 						self.oldDesc:SetTextColor(Color(200,200,200,200))
 					end
-					self.takeCraftButton:SetEnabled(true)
-					self.takeCraftButton:SetTextColor(Color(255,255,255,255))
 					creatingItemButton:SetEnabled(false)
 					name:SetTextColor(Color(0,0,0,200))
 					desc:SetTextColor(Color(0,0,0,200))
@@ -237,8 +237,8 @@ local PANEL = {}
 					if (self.oldDesc) then
 						self.oldDesc:SetTextColor(Color(200,200,200,200))
 					end
-					self.takeCraftButton:SetEnabled(true)
-					self.takeCraftButton:SetTextColor(Color(255,255,255,255))
+					self.craftButton:SetEnabled(true)
+					self.craftButton:SetTextColor(Color(255,255,255,255))
 					creatingItemButton:SetEnabled(false)
 					name:SetTextColor(Color(0,0,0,200))
 					desc:SetTextColor(Color(0,0,0,200))
@@ -275,8 +275,8 @@ local PANEL = {}
 					if (self.oldDesc) then
 						self.oldDesc:SetTextColor(Color(200,200,200,200))
 					end
-					self.takeCraftButton:SetEnabled(true)
-					self.takeCraftButton:SetTextColor(Color(255,255,255,255))
+					self.craftButton:SetEnabled(true)
+					self.craftButton:SetTextColor(Color(255,255,255,255))
 					creatingItemButton:SetEnabled(false)
 					name:SetTextColor(Color(0,0,0,200))
 					desc:SetTextColor(Color(0,0,0,200))
@@ -299,12 +299,13 @@ local PANEL = {}
 		self.closeBackButton.DoClick = function()
 			self:Remove()
 		end
-		self.takeCraftButton = vgui.Create( "DButton", self )
-		self.takeCraftButton:SetPos( 0.01369863 * self:GetWide(), 0.91625615763547 * self:GetTall() )
-		self.takeCraftButton:SetSize( 0.2 * self:GetWide(), 0.054187192118227 * self:GetTall() )
-		self.takeCraftButton:SetText("Craft")
-		self.takeCraftButton:SetTextColor(Color(255,255,255,255))
-		self.takeCraftButton:SetEnabled(false)
+		self.craftButton = vgui.Create( "DButton", self )
+		self.craftButton:SetEnabled(false)
+		self.craftButton:SetPos( 0.01369863 * self:GetWide(), 0.91625615763547 * self:GetTall() )
+		self.craftButton:SetSize( 0.2 * self:GetWide(), 0.054187192118227 * self:GetTall() )
+		self.craftButton:SetText("Craft")
+		self.craftButton:SetTextColor(Color(255,255,255,255))
+
 
 
 		self.categories = {}
