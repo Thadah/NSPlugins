@@ -25,11 +25,12 @@ if (SERVER) then
 	end
 
 	function ENT:CreateInv(activator)
-		local character = activator:getChar()
-		nut.item.newInv(character:getID(), "safe."..character:getID(), function(inventory)
-			character:setData("safebox", inventory:getID())
-		end)
-	end
+	  local character = activator:getChar()
+	  nut.item.registerInv("safe."..character:getID(), nut.config.get("safeWidth"), nut.config.get("safeHeight"))
+	  nut.item.newInv(character:getID(), "safe."..character:getID(), function(inventory)
+	      character:setData("safebox", inventory:getID())
+	  end)
+  end
 
 	function ENT:getInv(activator)
 		local index = activator:getChar():getData("safebox")
@@ -53,7 +54,7 @@ if (SERVER) then
 				end)
 			end
 		else
-			self:createInv(nut.config.get("invWidth"), nut.config.get("invHeight"), character:getID())
+			self:CreateInv(activator)
 		end
 	end
 
@@ -67,9 +68,11 @@ if (SERVER) then
 			self:RestoreInv(activator)
 		end
 	end
+
 	function ENT:Use(activator)
 		self:OpenInv(activator)
 	end
+
 else
 		netstream.Hook("safeOpen", function(index)
 			local inventory = nut.item.inventories[index]
@@ -100,7 +103,6 @@ else
 				if (IsValid(panel) and !IsValid(nut.gui.menu)) then
 					panel:Remove()
 				end
-				-- IDK Why. Just make it sure to not glitch out with other stuffs.
 				nut.gui.inv1.OnClose = oldClose
 			end
 

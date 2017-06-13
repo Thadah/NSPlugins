@@ -14,7 +14,7 @@ nut.config.add("safeWidth", 8, "The width of the safe", nil, {
 
 if (SERVER) then
 
-	function PLUGIN:saveBox()
+	function PLUGIN:SaveData()
 		local data = {}
 
 		for k, v in ipairs(ents.FindByClass("nut_safebox")) do
@@ -22,10 +22,6 @@ if (SERVER) then
 		end
 
 		self:setData(data)
-	end
-
-	function PLUGIN:SaveData()
-		self:saveBox()
 	end
 
 	function PLUGIN:LoadData()
