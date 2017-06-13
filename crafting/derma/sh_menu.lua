@@ -124,45 +124,12 @@ local PANEL = {}
 				local name = vgui.Create("DLabel", self.list)
 				local desc = vgui.Create("DLabel", self.list)
 
-				name:SetTextColor(Color(200,200,200,200))
+				name:SetTextColor(Color(100,100,100,200))
 				name:SetFont("nutMediumFont")
 				local width, heigth = surface.GetTextSize(v.name)
 				name:SetSize(width*2, heigth*1.25)
 				name:SetPos(0.01369863 * self:GetWide() + 100, localPos + ((buttonSizeH) / 3) - 5)
 				name:SetText(v.name)
-				name.OnCursorEntered = function()
-					if (self.oldButton != creatingItemButton) then
-						name:SetTextColor(Color(255,255,255,255))
-						desc:SetTextColor(Color(255,255,255,255))
-					end
-				end
-				name.OnCursorExited = function()
-					if (self.oldButton != creatingItemButton) then
-						name:SetTextColor(Color(200,200,200,200))
-						desc:SetTextColor(Color(200,200,200,200))
-					end
-				end
-
-				name.DoClick = function()
-					self.itemSelected = v
-					if (self.oldButton) then
-						self.oldButton:SetEnabled(true)
-					end
-					if (self.oldLabel) then
-						self.oldLabel:SetTextColor(Color(200,200,200,200))
-					end
-					if (self.oldDesc) then
-						self.oldDesc:SetTextColor(Color(200,200,200,200))
-					end
-					self.craftButton:SetEnabled(true)
-					self.craftButton:SetTextColor(Color(255,255,255,255))
-					creatingItemButton:SetEnabled(false)
-					name:SetTextColor(Color(0,0,0,200))
-					desc:SetTextColor(Color(0,0,0,200))
-					self.oldButton = self.itemsButtons[v.name]
-					self.oldLabel = name
-					self.oldDesc = desc
-				end
 
 				self.itemLabels[v.name] = name
 
@@ -170,43 +137,12 @@ local PANEL = {}
 				if text == "noDesc" then
 					text = "No valid description has been provided"
 				end
-				desc:SetTextColor(Color(200,200,200,200))
+				desc:SetTextColor(Color(100,100,100,200))
 				desc:SetFont("nutSmallFont")
 				local w, h = surface.GetTextSize(text)
 				desc:SetSize(math.min(w, buttonSizeW), h)
 				desc:SetPos(0.01369863 * self:GetWide() + 100, localPos + (3*(buttonSizeH) / 5) - 5)
 				desc:SetText(text)
-				name.OnCursorEntered = function()
-					if (self.oldButton != creatingItemButton) then
-						name:SetTextColor(Color(255,255,255,255))
-						desc:SetTextColor(Color(255,255,255,255))
-					end
-				end
-				name.OnCursorExited = function()
-					if (self.oldButton != creatingItemButton) then
-						name:SetTextColor(Color(200,200,200,200))
-						desc:SetTextColor(Color(200,200,200,200))
-					end
-				end
-
-				desc.DoClick = function()
-					self.itemSelected = v
-					if (self.oldButton) then
-						self.oldButton:SetEnabled(true)
-					end
-					if (self.oldLabel) then
-						self.oldLabel:SetTextColor(Color(200,200,200,200))
-					end
-					if (self.oldDesc) then
-						self.oldDesc:SetTextColor(Color(200,200,200,200))
-					end
-					creatingItemButton:SetEnabled(false)
-					name:SetTextColor(Color(0,0,0,200))
-					desc:SetTextColor(Color(0,0,0,200))
-					self.oldButton = self.itemsButtons[v.name]
-					self.oldLabel = name
-					self.oldDesc = desc
-				end
 
 				self.itemDescs[v.name] = desc
 
@@ -214,38 +150,6 @@ local PANEL = {}
 				icon:SetZPos(999)
 				icon:SetModel(v.model)
 				icon:SetPos(0.01369863 * self:GetWide(), localPos + (buttonSizeH - 64) / 2)
-				icon.OnCursorEntered = function()
-					if (self.oldButton != creatingItemButton) then
-						name:SetTextColor(Color(255,255,255,255))
-						desc:SetTextColor(Color(255,255,255,255))
-					end
-				end
-				icon.OnCursorExited = function()
-					if (self.oldButton != creatingItemButton) then
-						name:SetTextColor(Color(200,200,200,200))
-						desc:SetTextColor(Color(200,200,200,200))
-					end
-				end
-				icon.DoClick = function()
-					self.itemSelected = v
-					if (self.oldButton) then
-						self.oldButton:SetEnabled(true)
-					end
-					if (self.oldLabel) then
-						self.oldLabel:SetTextColor(Color(200,200,200,200))
-					end
-					if (self.oldDesc) then
-						self.oldDesc:SetTextColor(Color(200,200,200,200))
-					end
-					self.craftButton:SetEnabled(true)
-					self.craftButton:SetTextColor(Color(255,255,255,255))
-					creatingItemButton:SetEnabled(false)
-					name:SetTextColor(Color(0,0,0,200))
-					desc:SetTextColor(Color(0,0,0,200))
-					self.oldButton = self.itemsButtons[v.name]
-					self.oldLabel = name
-					self.oldDesc = desc
-				end
 
 				self.itemIcons[v.name] = icon
 
@@ -260,8 +164,8 @@ local PANEL = {}
 				end
 				creatingItemButton.OnCursorExited = function()
 					if (self.oldButton != creatingItemButton) then
-						name:SetTextColor(Color(200,200,200,200))
-						desc:SetTextColor(Color(200,200,200,200))
+						name:SetTextColor(Color(100,100,100,200))
+						desc:SetTextColor(Color(100,100,100,200))
 					end
 				end
 				creatingItemButton.DoClick = function()
@@ -270,16 +174,16 @@ local PANEL = {}
 						self.oldButton:SetEnabled(true)
 					end
 					if (self.oldLabel) then
-						self.oldLabel:SetTextColor(Color(200,200,200,200))
+						self.oldLabel:SetTextColor(Color(100,100,100,200))
 					end
 					if (self.oldDesc) then
-						self.oldDesc:SetTextColor(Color(200,200,200,200))
+						self.oldDesc:SetTextColor(Color(100,100,100,200))
 					end
 					self.craftButton:SetEnabled(true)
 					self.craftButton:SetTextColor(Color(255,255,255,255))
 					creatingItemButton:SetEnabled(false)
-					name:SetTextColor(Color(0,0,0,200))
-					desc:SetTextColor(Color(0,0,0,200))
+					name:SetTextColor(Color(255,255,255,255))
+					desc:SetTextColor(Color(255,255,255,255))
 					self.oldButton = self.itemsButtons[v.name]
 					self.oldLabel = name
 					self.oldDesc = desc
@@ -305,8 +209,6 @@ local PANEL = {}
 		self.craftButton:SetSize( 0.2 * self:GetWide(), 0.054187192118227 * self:GetTall() )
 		self.craftButton:SetText("Craft")
 		self.craftButton:SetTextColor(Color(255,255,255,255))
-
-
 
 		self.categories = {}
 		self.categorySelected = ""

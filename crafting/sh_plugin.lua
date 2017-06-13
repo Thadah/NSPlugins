@@ -69,6 +69,22 @@ local function canPlayerCraft(client, item)
 	if (!recipe) then
 		return nil, item
 	end
+
+	if recipe then
+		for _,v in pairs(items) do
+			for k2,v2 in pairs (recipe) do
+				if (v.uniqueID == k2) then
+					recipe[k2] = v2 - 1
+				end
+			end
+		end
+		for k3, v3 in pairs(recipe) do
+			if v3 > 0 then
+				return false, item
+			end
+		end
+	end
+
 	if tools then
 		for _,item in pairs (items) do
 			for _,v0 in pairs(tools) do
@@ -82,21 +98,7 @@ local function canPlayerCraft(client, item)
 			return 0, item
 		end
 	end
-	if recipe then
-		for _,v in pairs(items) do
-			for k2,v2 in pairs (recipe) do
-				if (v.uniqueID == k2) then
-					recipe[k2] = v2 - 1
-				end
-			end
-		end
 
-		for k3, v3 in pairs(recipe) do
-			if v3 > 0 then
-				return false, item
-			end
-		end
-	end
 	return true, item
 end
 
