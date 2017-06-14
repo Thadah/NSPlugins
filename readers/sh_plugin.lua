@@ -10,19 +10,21 @@ if (SERVER) then
 	resource.AddWorkshop("282312812")
 
 	function PLUGIN:SaveData()
+		local data = {}
+
 		for _, v in pairs(self.readerType) do
 			for _, v2 in pairs(ents.FindByClass(v)) do
-				self.locks[#self.locks + 1] = {reader = v, position = v2:GetPos(), angles = v2:GetAngles(), door = v2.door}
+				data[#data + 1] = {reader = v, position = v2:GetPos(), angles = v2:GetAngles(), door = v2.door}
 			end
 		end
 
-		self:setData(self.locks)
+		self:setData(data)
 	end
 
 	function PLUGIN:LoadData()
-		local lock = self:getData() or {}
-		
-		for k, v in ipairs(lock) do
+		local locks = self:getData()
+
+		for k, v in ipairs(locks) do
 			local reader = v.reader
 			local position = v.position
 			local angles = v.angles
@@ -34,7 +36,7 @@ if (SERVER) then
 				entity:SetAngles(angles)
 				entity.door = door
 				entity:Spawn()
-				
+
 			for _, door in pairs( ents.FindInSphere( door, 5 ) ) do
 				if door then
 					door:Fire( "close", .1 )
@@ -87,6 +89,6 @@ nut.command.add("addlock", {
 				return "@valuesRestored"
 			end
 		end
-	
+
 	end
 })
