@@ -5,6 +5,12 @@ PLUGIN.author = "La Corporativa"
 PLUGIN.desc = "Adds card readers with different access levels"
 PLUGIN.readerType = {"nut_cwureader", "nut_comreader", "nut_admreader", "nut_nucreader"}
 
+nut.config.add("openTime", 4.0, "How much time a door will stay open.", nil, {
+	form = "Float",
+	data = {min=1.0, max=3600.0},
+	category = "Readers"
+})
+
 if (SERVER) then
 	resource.AddWorkshop("282312812")
 

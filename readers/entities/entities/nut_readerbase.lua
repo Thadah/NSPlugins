@@ -19,37 +19,35 @@ if (SERVER) then
 
 	function ENT:Use(activator)
 		if !activator.nextUse or activator.nextUse < CurTime() then
-				local inventory = activator:getChar():getInv()
-				for _, v in pairs(self.Cards) do
-					if (inventory:hasItem(v)) then
-						self.Status = 1
-					end
+			local inventory = activator:getChar():getInv()
+			for _, v in pairs(self.Cards) do
+				if (inventory:hasItem(v)) then
+					self.Status = 1
+				else
+					self.Status = 2
+					self:EmitSound("buttons/combine_button2.wav")
 				end
-
-					if ( self.Status != 1) then
-						self.Status = 2
-						self:EmitSound("buttons/combine_button2.wav")
-					end
-
-					if (self.door and self.Status == 1) then
-						for _, door in pairs( ents.FindInSphere( self.door, 5 ) ) do
-							if IsValid(door) then
-								self:EmitSound("buttons/combine_button1.wav")
-								door:Fire( "unlock", .1 )
-								door:Fire( "open", .1 )
-
-								timer.Simple(4, function()
-									door:Fire( "close", .1 )
-									door:Fire( "lock", .1 )
-								end)
-
-							end
-						end
-					end
-					netstream.Start(activator, "changeStatus", self.Status)
-					activator.nextUse = CurTime() + 1
 			end
 		end
+
+		if (self.door and self.Status == 1) then
+			for _, door in pairs( ents.FindInSphere( self.door, 5 ) ) do
+				if IsValid(door) then
+					self:EmitSound("buttons/combine_button1.wav")
+					door:Fire( "unlock", .1 )
+					door:Fire( "open", .1 )
+
+					timer.Simple(nut.config.get("openTime", 4.0), function()
+						door:Fire( "close", .1 )
+						door:Fire( "lock", .1 )
+					end)
+				end
+			end
+		end
+
+		netstream.Start(activator, "changeStatus", self.Status)
+		activator.nextUse = CurTime() + 1
+	end
 
 else
 
