@@ -4,7 +4,6 @@ PLUGIN.name = "Card Readers"
 PLUGIN.author = "La Corporativa"
 PLUGIN.desc = "Adds card readers with different access levels"
 PLUGIN.readerType = {"nut_cwureader", "nut_comreader", "nut_admreader", "nut_nucreader"}
-PLUGIN.locks = PLUGIN.locks or {}
 
 if (SERVER) then
 	resource.AddWorkshop("282312812")
