@@ -18,19 +18,23 @@ if (SERVER) then
 	end
 
 	function ENT:Use(activator)
-		if !activator.nextUse or activator.nextUse < CurTime() then
+		local status = 0
+		if (!activator.nextUse or activator.nextUse < CurTime()) then
 			local inventory = activator:getChar():getInv()
 			for _, v in pairs(self.Cards) do
 				if (inventory:hasItem(v)) then
-					self.Status = 1
-				else
-					self.Status = 2
-					self:EmitSound("buttons/combine_button2.wav")
+					status = 1
+					break
 				end
 			end
 		end
 
-		if (self.door and self.Status == 1) then
+		if (status != 1) then
+			status = 2
+			self:EmitSound("buttons/combine_button2.wav")
+		end
+
+		if (self.door and status == 1) then
 			for _, door in pairs( ents.FindInSphere( self.door, 5 ) ) do
 				if IsValid(door) then
 					self:EmitSound("buttons/combine_button1.wav")
@@ -45,7 +49,7 @@ if (SERVER) then
 			end
 		end
 
-		netstream.Start(activator, "changeStatus", self.Status)
+		netstream.Start(activator, "changeStatus", status)
 		activator.nextUse = CurTime() + 1
 	end
 
