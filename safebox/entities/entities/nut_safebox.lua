@@ -30,7 +30,7 @@ if (SERVER) then
 	  nut.item.newInv(character:getID(), "safe."..character:getID(), function(inventory)
 	      character:setData("safebox", inventory:getID())
 	  end)
-  end
+  	end
 
 	function ENT:getInv(activator)
 		local index = activator:getChar():getData("safebox")
