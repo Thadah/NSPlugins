@@ -35,7 +35,7 @@ local gatherItems = {
 }
 
 if SERVER then
-	resource.AddWorkshop("162026804")
+	resource.AddWorkshop("152429256")
 
 	function PLUGIN:SaveData()
 		local data = {}
