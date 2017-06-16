@@ -7,7 +7,7 @@ nut.util.include("derma/sh_menu.lua")
 if (SERVER) then
 
 	resource.AddWorkshop("294107789")
-	resource.AddWorkshop("162026804")
+	resource.AddWorkshop("152429256")
 
 	function PLUGIN:SaveData()
 		local data = {}
