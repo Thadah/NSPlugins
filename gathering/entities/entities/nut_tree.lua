@@ -43,4 +43,16 @@ else
 	function ENT:Draw()
 		self:DrawModel()
 	end
+
+	ENT.DrawEntityInfo = true
+	local toScreen = FindMetaTable("Vector").ToScreen
+	local colorAlpha = ColorAlpha
+	local drawText = nut.util.drawText
+	local configGet = nut.config.get
+
+	function ENT:onDrawEntityInfo(alpha)
+		local position = toScreen(self.LocalToWorld(self, self.OBBCenter(self)))
+		local x, y = position.x, position.y
+		local tx, ty = drawText("Tree", x, y, colorAlpha(configGet("color"), alpha), 1, 1, nil, alpha * 2)
+	end
 end
