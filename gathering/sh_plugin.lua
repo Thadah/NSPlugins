@@ -76,25 +76,23 @@ if SERVER then
 	end
 
 	function PLUGIN:Think()
-		local curTime = CurTime()
 
 		if nut.config.get("gathering") then
-
 			self:removeInvalidGathers()
-			if (#self.spawnedGathers <= nut.config.get("gMaxWorldGather")) then
-				if curTime + nut.config.get("gatheringSpawn") <= CurTime() then
-						local point = table.Random(self.gatherPoints)
 
-						if (!point) then return end
+			if (#self.spawnedGathers <= nut.config.get("gMaxWorldGather") and (!curTime or curTime + nut.config.get("gatheringSpawn") <= CurTime())) then
+					local curTime = CurTime()
+					local point = table.Random(self.gatherPoints)
 
-						for _, v in pairs(self.spawnedGathers) do
-							if point == v[2] then return end
-						end
+					if (!point) then return end
 
-						if #self.spawnedGathers >= nut.config.get("gMaxWorldGather") then return end
+					for _, v in pairs(self.spawnedGathers) do
+						if point == v[2] then return end
+					end
 
-						self:setGathering(point)
-				end
+					if #self.spawnedGathers >= nut.config.get("gMaxWorldGather") then return end
+
+					self:setGathering(point)
 			end
 		end
 	end
