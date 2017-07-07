@@ -1,12 +1,12 @@
 PLUGIN.name = "Looting"
-PLUGIN.author = "orc, thadah, hikka (refix)"
+PLUGIN.author = "orc, thadah, hikka (fix)"
 PLUGIN.desc = "A plugin for dropping player inventory on death."
 
 nut.config.add("lootTime", 50, "Number of seconds before loot disappears.", nil, {data = {min = 1, max = 1000}, category = "Looting"})
 
 -- note nut_container does not exist in 1.1 so alter that
 
-function PLUGIN:PlayerDeath( ply, dmg, att )		
+function PLUGIN:PlayerDeath( ply, dmg, att )
 	local entity = ents.Create("nut_loot") --** Create World Container that should not be saved in the server.
 	entity:SetPos( ply:GetPos() + Vector( 0, 0, 10 ) )
 	entity:SetAngles(entity:GetAngles())
@@ -32,9 +32,14 @@ function PLUGIN:PlayerDeath( ply, dmg, att )
 		end
 	end)
 
-	for _, v in pairs(ply:getChar():getInv():getItems()) do
-		v:transfer(entity:getNetVar("id"))
-		-- v:transfer(entity:getNetVar("id", ""))
+	local items = ply:getChar():getInv():getItems()
+	for _, v in pairs(items) do
+		if (item:getData("equip")) then
+			entity:getInv():add(item.uniqueID)
+			item:remove()
+		else
+			v:transfer(entity:getNetVar("id"))
+		end
 	end
 
 	ply:StripAmmo() --** This is Normal.
@@ -67,7 +72,7 @@ if (SERVER) then
 				container:SetModel(v[3])
 				container:SetSolid(SOLID_VPHYSICS)
 				container:PhysicsInit(SOLID_VPHYSICS)
-				
+
 				local physObject = container:GetPhysicsObject()
 
 				if (physObject) then
@@ -84,7 +89,7 @@ if (SERVER) then
 	function PLUGIN:LoadData()
 		self:loadLoot()
 	end
-	
+
 	function PLUGIN:LootItemRemoved(entity, inventory)
 		self:saveLoot()
 	end
@@ -97,7 +102,7 @@ if (SERVER) then
 		end
 
 		client.nutBagEntity = nil
-		
+
 		--local inv = nut.item.inventories[index:getNetVar("id")]
 		--local inv = index:getInv():getItems()
 		--if inv && #inv < 1 then index.timeToDelete = CurTime() return end
@@ -144,7 +149,7 @@ else
 			nut.gui["inv"..index] = lootingPanelMain
 		end
 	end)
-	
+
 	netstream.Hook("closeLootMenuSafe", function()
 		if (IsValid(nut.gui.inv1) and !IsValid(nut.gui.menu)) then
 			nut.gui.inv1:Remove()
