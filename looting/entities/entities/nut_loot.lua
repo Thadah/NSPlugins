@@ -14,7 +14,7 @@ if (SERVER) then
 			self:Remove()
 		end
 	end
-	
+
 	function ENT:Initialize()
 		self:SetModel("models/props_junk/watermelon01.mdl")
 		self:SetSolid(SOLID_VPHYSICS)
@@ -66,8 +66,8 @@ if (SERVER) then
 				end
 				v.nutBagEntity = nil
 			end
-		
-		
+
+
 			local item = nut.item.inventories[index]
 			if (item) then
 				nut.item.inventories[index] = nil
@@ -78,7 +78,7 @@ if (SERVER) then
 				hook.Run("StorageItemRemoved", self, item)
 			end
 		end
-		
+
 		self:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1, 3)..".wav")
 		local position = self:LocalToWorld(self:OBBCenter())
 		local effect = EffectData()
@@ -97,7 +97,7 @@ if (SERVER) then
 			if (activator:GetPos():Distance(self:GetPos()) < 101) then
 				self.receivers[activator] = true
 				activator.nutBagEntity = self
-				
+
 				inventory:sync(activator)
 				netstream.Start(activator, "lootOpen", self, inventory:getID())
 				self:EmitSound("items/ammocrate_open.wav")
@@ -117,7 +117,7 @@ if (SERVER) then
 
 		if (inventory and (activator.nutNextOpen or 0) < CurTime()) then
 			if (activator:getChar()) then
-				self:OpenInv(activator)	
+				self:OpenInv(activator)
 			end
 
 			activator.nutNextOpen = CurTime() + OPEN_TIME * 1.5
@@ -133,7 +133,7 @@ else
 	function ENT:onDrawEntityInfo(alpha)
 		local position = toScreen(self.LocalToWorld(self, self.OBBCenter(self)))
 		local x, y = position.x, position.y
-		local tx, ty = drawText("Loot", x, y, colorAlpha(configGet("color"), alpha), 1, 1, nil, alpha * 0.65)
+		local tx, ty = drawText(self:getNetVar("plyName").."'s Belongings", x, y, colorAlpha(configGet("color"), alpha), 1, 1, nil, alpha * 0.65)
 	end
 end
 
