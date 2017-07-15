@@ -2,51 +2,57 @@ PLUGIN.name = "Looting"
 PLUGIN.author = "orc, thadah, hikka (fix)"
 PLUGIN.desc = "A plugin for dropping player inventory on death."
 
-nut.config.add("lootTime", 50, "Number of seconds before loot disappears.", nil, {data = {min = 1, max = 1000}, category = "Looting"})
+PLUGIN.ignored = PLUGIN.ignored or {}
+nut.util.include("sh_ignored.lua")
 
--- note nut_container does not exist in 1.1 so alter that
-
-function PLUGIN:PlayerDeath( ply, dmg, att )
-	local entity = ents.Create("nut_loot") --** Create World Container that should not be saved in the server.
-	entity:SetPos( ply:GetPos() + Vector( 0, 0, 10 ) )
-	entity:SetAngles(entity:GetAngles())
-	entity:Spawn()
-	entity:setNetVar("name", "Belongings" ) --** Yup.
-	entity:setNetVar( "max", 5000 )
-	entity:SetModel("models/props_junk/garbage_bag001a.mdl")
-	entity:SetSolid(SOLID_VPHYSICS)
-	entity:PhysicsInit(SOLID_VPHYSICS)
-
-	local physObj = entity:GetPhysicsObject()
-
-	if (IsValid(physObj)) then
-		physObj:EnableMotion(true)
-		physObj:Wake()
-	end
-
-	--nut.item.newInv(0, "loot-"..math.random(0,9999), function(inventory)
-	nut.item.newInv(0, "loot"..ply:getChar():getID(), function(inventory)
-		if (IsValid(entity)) then
-			inventory:setSize(nut.config.get("invW"), nut.config.get("invH"))
-			entity:setInventory(inventory)
-		end
-	end)
-
-	local items = ply:getChar():getInv():getItems()
-	for _, v in pairs(items) do
-		if (item:getData("equip")) then
-			entity:getInv():add(item.uniqueID)
-			item:remove()
-		else
-			v:transfer(entity:getNetVar("id"))
-		end
-	end
-
-	ply:StripAmmo() --** This is Normal.
-
-end
+nut.config.add("lootTime", 50, "Number of seconds before loot disappears.", nil, {
+	data = {min = 1, max = 86400},
+	category = "Looting"
+})
 
 if (SERVER) then
+
+	function PLUGIN:PlayerDeath( ply, dmg, att )
+		local entity = ents.Create("nut_loot")
+		entity:SetPos( ply:GetPos() + Vector( 0, 0, 10 ) )
+		entity:SetAngles(entity:GetAngles())
+		entity:Spawn()
+		entity:setNetVar("name", "Belongings" )
+		entity:setNetVar("plyName", ply:Name())
+		entity:setNetVar( "max", 5000 )
+		entity:SetModel("models/props_junk/garbage_bag001a.mdl")
+		entity:SetSolid(SOLID_VPHYSICS)
+		entity:PhysicsInit(SOLID_VPHYSICS)
+
+		local physObj = entity:GetPhysicsObject()
+
+		if (IsValid(physObj)) then
+			physObj:EnableMotion(true)
+			physObj:Wake()
+		end
+
+		nut.item.newInv(0, "loot"..ply:getChar():getID(), function(inventory)
+			if (IsValid(entity)) then
+				inventory:setSize(nut.config.get("invW"), nut.config.get("invH"))
+				entity:setInventory(inventory)
+			end
+		end)
+
+		local items = ply:getChar():getInv():getItems()
+		for _, v in pairs(items) do
+			if (table.HasValue(self.ignored, v.uniqueID)) then continue end
+			--Thanks efex03 for noticing the issue with equipped items
+			if (v:getData("equip")) then
+				entity:getInv():add(v.uniqueID)
+				v:remove()
+			else
+				v:transfer(entity:getNetVar("id"))
+			end
+		end
+
+		ply:StripAmmo()
+
+	end
 
 	function PLUGIN:saveLoot()
 		local data = {}
@@ -100,12 +106,7 @@ if (SERVER) then
 		if (IsValid(entity)) then
 			entity.receivers[client] = nil
 		end
-
 		client.nutBagEntity = nil
-
-		--local inv = nut.item.inventories[index:getNetVar("id")]
-		--local inv = index:getInv():getItems()
-		--if inv && #inv < 1 then index.timeToDelete = CurTime() return end
 	end)
 
 else
@@ -142,7 +143,7 @@ else
 				end
 
 				netstream.Start("lootExit", entity)
-				-- IDK Why. Just make it sure to not glitch out with other stuffs.
+
 				nut.gui.inv1.OnClose = oldClose
 			end
 
