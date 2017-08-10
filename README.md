@@ -2,6 +2,8 @@
 
 ## Crafting Plugin
 
+This plugin was made in collaboration with [Cyumus Aduni](https://github.com/Cyumus/Plugins)
+
 This plugin allows players to craft items of all kinds using recipes, components or items. It can be used alongside the gathering plugin so that raw materials can be gotten from trees or rocks.
 
 To use it, just spawn a Crafting Table wherever you want. 
@@ -9,6 +11,8 @@ To use it, just spawn a Crafting Table wherever you want.
 Items can be created using the bases provided with the plugin.
 
 ## Gathering Plugin
+
+This plugin was made in collaboration with [Cyumus Aduni](https://github.com/Cyumus/Plugins)
 
 The gathering plugin is designed to allow players to gather resources from rocks or trees.
 
@@ -28,6 +32,8 @@ This plugin will make a player drop all its inventory in the form of a bag when 
 not make the player drop the money they have.
 
 ## Readers Plugin
+
+This plugin was made in collaboration with [Cyumus Aduni](https://github.com/Cyumus/Plugins)
 
 Similar to the Access plugin, but simpler, allows adding some card readers next to the doors which can only be opened with a card that's the same level of the reader or higher.
 
