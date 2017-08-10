@@ -12,7 +12,7 @@ Items can be created using the bases provided with the plugin.
 
 ## Gathering Plugin
 
-This plugin was made in collaboration with [Cyumus Aduni](https://github.com/Cyumus/Plugins)
+This plugin was made by [Cyumus Aduni](https://github.com/Cyumus/Plugins) and later modified by Thadah Denyse
 
 The gathering plugin is designed to allow players to gather resources from rocks or trees.
 
