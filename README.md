@@ -2,7 +2,7 @@
 
 ## Crafting Plugin
 
-This plugin was made by [Cyumus Aduni](https://github.com/Cyumus/Plugins)
+This plugin was made by [Cyumus Aduni](https://github.com/Cyumus/Plugins) and later modified by Thadah Denyse
 
 This plugin allows players to craft items of all kinds using recipes, components or items. It can be used alongside the gathering plugin so that raw materials can be gotten from trees or rocks.
 
@@ -33,7 +33,7 @@ not make the player drop the money they have.
 
 ## Readers Plugin
 
-This plugin was made by [Cyumus Aduni](https://github.com/Cyumus/Plugins)
+This plugin was made by [Cyumus Aduni](https://github.com/Cyumus/Plugins) and later modified by Thadah Denyse
 
 Similar to the Access plugin, but simpler, allows adding some card readers next to the doors which can only be opened with a card that's the same level of the reader or higher.
 
