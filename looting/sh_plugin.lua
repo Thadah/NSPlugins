@@ -40,7 +40,7 @@ if (SERVER) then
 
 		local items = ply:getChar():getInv():getItems()
 		for _, v in pairs(items) do
-			if (table.HasValue(self.ignored, v.uniqueID)) then continue end
+			if self.ignored[v.uniqueID] then continue end
 			--Thanks efex03 for noticing the issue with equipped items
 			if (v:getData("equip")) then
 				entity:getInv():add(v.uniqueID)
