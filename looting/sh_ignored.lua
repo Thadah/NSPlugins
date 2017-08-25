@@ -1,6 +1,5 @@
 --Ignored Items will be set here
-
 PLUGIN.ignored = {
-  "cid",
-  "cid2"
+	["cid"] = true,
+	["cid2"] = true,
 }
