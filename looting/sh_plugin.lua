@@ -20,7 +20,7 @@ if (SERVER) then
 		entity:setNetVar("name", "Belongings" )
 		entity:setNetVar("plyName", ply:Name())
 		entity:setNetVar( "max", 5000 )
-		entity:SetModel("models/props_junk/garbage_bag001a.mdl")
+		entity:SetModel("models/props_c17/SuitCase_Passenger_Physics.mdl")
 		entity:SetSolid(SOLID_VPHYSICS)
 		entity:PhysicsInit(SOLID_VPHYSICS)
 
@@ -44,9 +44,11 @@ if (SERVER) then
 			--Thanks efex03 for noticing the issue with equipped items
 			if (v:getData("equip")) then
 				entity:getInv():add(v.uniqueID)
-				--Thanks Web for making equipped outfits unequip from the dead player
+				if v.functions.EquipUn.onRun then
 				v.player = ply
-				v.functions.EquipUn.onRun(v)
+                v.functions.EquipUn.onRun(v)
+				end
+
 				v:remove()
 			else
 				v:transfer(entity:getNetVar("id"))
