@@ -44,7 +44,7 @@ if (SERVER) then
 			--Thanks efex03 for noticing the issue with equipped items
 			if (v:getData("equip")) then
 				entity:getInv():add(v.uniqueID)
-				--Thanks Web for making equipped outfits unequip from the dead player
+				--Thanks Web and Micronde making equipped outfits unequip from the dead player
 				v.player = ply
 				v.functions.EquipUn.onRun(v)
 				v:remove()
