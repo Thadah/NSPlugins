@@ -45,8 +45,8 @@ if (SERVER) then
 			if (v:getData("equip")) then
 				entity:getInv():add(v.uniqueID)
 				if v.functions.EquipUn.onRun then
-				v.player = ply
-                v.functions.EquipUn.onRun(v)
+					v.player = ply
+                			v.functions.EquipUn.onRun(v)
 				end
 
 				v:remove()
