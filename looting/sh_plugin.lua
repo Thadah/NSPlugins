@@ -10,10 +10,13 @@ nut.config.add("lootTime", 50, "Number of seconds before loot disappears.", nil,
 	category = "Looting"
 })
 
+local Vector, IsValid, pairs, ipairs, LocalPlayer, ents = Vector, IsValid, pairs, ipairs, LocalPlayer, ents
+local ents_Create, ents_FindByClass = ents.Create, ents.FindByClass
+
 if (SERVER) then
 
 	function PLUGIN:PlayerDeath( ply, dmg, att )
-		local entity = ents.Create("nut_loot")
+		local entity = ents_Create("nut_loot")
 		entity:SetPos( ply:GetPos() + Vector( 0, 0, 10 ) )
 		entity:SetAngles(entity:GetAngles())
 		entity:Spawn()
@@ -40,11 +43,12 @@ if (SERVER) then
 
 		local items = ply:getChar():getInv():getItems()
 		for _, v in pairs(items) do
-			if (table.HasValue(self.ignored, v.uniqueID)) then continue end
+			if self.ignored[v.uniqueID] then continue end
 			--Thanks efex03 for noticing the issue with equipped items
 			if (v:getData("equip")) then
 				entity:getInv():add(v.uniqueID)
-				if v.functions.EquipUn.onRun then
+				--Thanks Web and Micronde making equipped outfits unequip from the dead player
+				if (v.functions.EquipUn.onRun) then
 					v.player = ply
                 			v.functions.EquipUn.onRun(v)
 				end
@@ -56,13 +60,12 @@ if (SERVER) then
 		end
 
 		ply:StripAmmo()
-
 	end
 
 	function PLUGIN:saveLoot()
 		local data = {}
 
-		for k, v in ipairs(ents.FindByClass("nut_loot")) do
+		for k, v in ipairs(ents_FindByClass("nut_loot")) do
 			if (v:getInv()) then
 				data[#data + 1] = {v:GetPos(), v:GetAngles(), v:getNetVar("id"), v:GetModel()}
 			end
@@ -76,7 +79,7 @@ if (SERVER) then
 
 		if (data) then
 			for k, v in ipairs(data) do
-				local container = ents.Create("nut_loot")
+				local container = ents_Create("nut_loot")
 				container:SetPos(v[1])
 				container:SetAngles(v[2])
 				container:Spawn()
@@ -115,11 +118,12 @@ if (SERVER) then
 	end)
 
 else
+	local vgui_Create = vgui.Create
 	netstream.Hook("lootOpen", function(entity, index)
 		local inventory = nut.item.inventories[index]
 
 		if (IsValid(entity) and inventory and inventory.slots) then
-			nut.gui.inv1 = vgui.Create("nutInventory")
+			nut.gui.inv1 = vgui_Create("nutInventory")
 			nut.gui.inv1:ShowCloseButton(true)
 
 			local inventory2 = LocalPlayer():getChar():getInv()
@@ -128,7 +132,7 @@ else
 				nut.gui.inv1:setInventory(inventory2)
 			end
 
-			lootingPanelMain = vgui.Create("nutInventory")
+			lootingPanelMain = vgui_Create("nutInventory")
 			lootingPanelMain:ShowCloseButton(true)
 			lootingPanelMain:SetTitle("Loot")
 			lootingPanelMain:setInventory(inventory)

@@ -1,16 +1,16 @@
-local PLUGIN = PLUGIN
-
 ENT.Type = "anim"
 ENT.PrintName = "Loot"
 ENT.Category = "NutScript"
 ENT.Spawnable = false
 ENT.timeToDelete = 1
 
-
 if (SERVER) then
-
+	local hook, math, player = hook, math, player
+	local IsValid, CurTime, pairs, hook_Run, ipairs, player_GetAll = IsValid, CurTime, pairs, hook.Run, ipairs, player.GetAll
+	local EffectData, math_random = EffectData, math.random
+	
 	function ENT:Think()
-		if (IsValid(self) && self.timeToDelete <= CurTime()) then
+		if (IsValid(self) and self.timeToDelete <= CurTime()) then
 			self:Remove()
 		end
 	end
@@ -58,7 +58,7 @@ if (SERVER) then
 		local index = self:getNetVar("id")
 
 		if (!nut.shuttingDown and !self.nutIsSafe and index) then
-			for _, v in ipairs(player.GetAll()) do
+			for _, v in ipairs(player_GetAll()) do
 				netstream.Start(v, "closeLootMenuSafe")
 				local entity = v.nutBagEntity
 				if (IsValid(entity)) then
@@ -75,11 +75,11 @@ if (SERVER) then
 				nut.db.query("DELETE FROM nut_items WHERE _invID = "..index)
 				nut.db.query("DELETE FROM nut_inventories WHERE _invID = "..index)
 
-				hook.Run("StorageItemRemoved", self, item)
+				hook_Run("StorageItemRemoved", self, item)
 			end
 		end
 
-		self:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1, 3)..".wav")
+		self:EmitSound("physics/cardboard/cardboard_box_break"..math_random(1, 3)..".wav")
 		local position = self:LocalToWorld(self:OBBCenter())
 		local effect = EffectData()
 		effect:SetStart(position)
@@ -113,7 +113,7 @@ if (SERVER) then
 	function ENT:Use(activator)
 		local inventory = self:getInv()
 		--local inv = nut.item.inventories[self:getNetVar("id")]
-		--if inv && #inv:getItems() < 1 then self.timeToDelete = CurTime() return end
+		--if inv and #inv:getItems() < 1 then self.timeToDelete = CurTime() return end
 
 		if (inventory and (activator.nutNextOpen or 0) < CurTime()) then
 			if (activator:getChar()) then
