@@ -11,7 +11,7 @@ nut.config.add("lootTime", 50, "Number of seconds before loot disappears.", nil,
 })
 
 local Vector, IsValid, pairs, ipairs, LocalPlayer, ents = Vector, IsValid, pairs, ipairs, LocalPlayer, ents
-local ents_Create, ents_FindByClass, vgui_Create = ents.Create, ents.FindByClass, vgui.Create
+local ents_Create, ents_FindByClass = ents.Create, ents.FindByClass
 
 if (SERVER) then
 
@@ -47,7 +47,8 @@ if (SERVER) then
 			--Thanks efex03 for noticing the issue with equipped items
 			if (v:getData("equip")) then
 				entity:getInv():add(v.uniqueID)
-				if v.functions.EquipUn.onRun then
+				--Thanks Web and Micronde making equipped outfits unequip from the dead player
+				if (v.functions.EquipUn.onRun) then
 					v.player = ply
                 			v.functions.EquipUn.onRun(v)
 				end
@@ -59,7 +60,6 @@ if (SERVER) then
 		end
 
 		ply:StripAmmo()
-
 	end
 
 	function PLUGIN:saveLoot()
@@ -118,6 +118,7 @@ if (SERVER) then
 	end)
 
 else
+	local vgui_Create = vgui.Create
 	netstream.Hook("lootOpen", function(entity, index)
 		local inventory = nut.item.inventories[index]
 
